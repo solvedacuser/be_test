@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: backend
+
+# 프로파일 세팅
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}   # 기본 활성 프로파일 (application-local.yml 사용)
+
+# JPA 세팅
+  jpa:
+    hibernate:
+      ddl-auto: create            # 필요 시 수정
+    properties:
+      hibernate:
+        format_sql: true          # 로그에 DB 쿼리 출력 시 포맷팅
+    open-in-view: false
+
+# 애플리케이션 포트 세팅
+server:
+  port: 8080
+  forward-headers-strategy: framework
+
+# Spring Actuator 세팅
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health     # health만 외부 노출 (헬스체킹용)
+  endpoint:
+    health:
+      show-details: always
+
+# Spring Docs (Swagger UI) 세팅
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    try-it-out-enabled: true
+    persist-authorization: true
+  show-actuator: true
+
+# 애플리케이션 설정
+app:
+  jwt:
+    secret: ${JWT_SECRET:likelion-backend-jwt-secret-key-for-local-development-please-change}
+    access-token-expiration-ms: ${JWT_ACCESS_TOKEN_EXPIRATION_MS:900000}
+    refresh-token-expiration-ms: ${JWT_REFRESH_TOKEN_EXPIRATION_MS:1209600000}
+  cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:3000}
