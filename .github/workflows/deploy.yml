@@ -32,12 +32,14 @@ jobs:
 
       # Gradle 실행 권한 부여
       - name: Grant execute permission for gradlew
+        working-directory: backend
         run: chmod +x gradlew
 
       # 테스트 실행
       # 현재 배포는 빠른 배포를 위해 테스트를 생략한다.
       # 테스트를 배포 전에 강제하려면 아래 주석을 해제한다.
       # - name: Run tests
+      #   working-directory: backend
       #   run: ./gradlew test --no-daemon
 
       # Docker Buildx 설정
@@ -57,7 +59,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./backend
+          file: ./backend/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/likelion-backend:latest
